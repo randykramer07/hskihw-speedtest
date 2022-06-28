@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<meta charset="UTF-8" />
+<head>
+    <title>HSKIHW SpeedTest</title>
+    <link rel="shortcut icon" href="favicon.ico">
+</head>
+<script type="text/javascript" src="speedtest.js"></script>
+<body>
+    <h1>Hoe Snel Kan Ik Hier Weg | Fontys SpeedTest</h1>
+
+    <h4>Download</h4>
+    <p id="download"></p>
+
+    <h4>Upload</h4>
+    <p id="upload"></p>
+
+    <h4>Ping</h4>
+    <p id="ping"></p>
+
+    <script type="text/javascript">
+        var s=new Speedtest();
+        s.onupdate = function (data) { // JavaScript Website 
+            document.getElementById('download').textContent = data.dlStatus + ' Mbit/s'
+            document.getElementById('upload').textContent = data.ulStatus + ' Mbit/s'
+            document.getElementById('ping').textContent = data.pingStatus + ' ms, ' 
+            // document.getElementById('ip').textContent = data.clientIp
+        }
+        s.start(); // start the speedtest with default settings
+    </script>
+
+	<a href="https://github.com/randykramer07/hskihw-speedtest">Source code</a>
+
+</body>
+</html>
