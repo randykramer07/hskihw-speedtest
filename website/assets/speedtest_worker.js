@@ -65,8 +65,8 @@ this.addEventListener("message", function(e) {
 				dlStatus: dlStatus,
 				ulStatus: ulStatus,
 				pingStatus: pingStatus,
-				clientIp: clientIp,
-				jitterStatus: jitterStatus,
+				// clientIp: clientIp,
+				// jitterStatus: jitterStatus,
 				dlProgress: dlProgress,
 				ulProgress: ulProgress,
 				pingProgress: pingProgress,
@@ -224,8 +224,6 @@ this.addEventListener("message", function(e) {
 		dlStatus = "";
 		ulStatus = "";
 		pingStatus = "";
-		jitterStatus = "";
-        clientIp = "";
 		dlProgress = 0;
 		ulProgress = 0;
 		pingProgress = 0;
@@ -256,34 +254,34 @@ function clearRequests() {
 		xhr = null;
 	}
 }
-// gets client's IP using url_getIp, then calls the done function
-var ipCalled = false; // used to prevent multiple accidental calls to getIp
-var ispInfo = ""; //used for telemetry
-function getIp(done) {
-	tverb("getIp");
-	if (ipCalled) return;
-	else ipCalled = true; // getIp already called?
-	var startT = new Date().getTime();
-	xhr = new XMLHttpRequest();
-	xhr.onload = function() {
-		tlog("IP: " + xhr.responseText + ", took " + (new Date().getTime() - startT) + "ms");
-		try {
-			var data = JSON.parse(xhr.responseText);
-			clientIp = data.processedString;
-			ispInfo = data.rawIspInfo;
-		} catch (e) {
-			clientIp = xhr.responseText;
-			ispInfo = "";
-		}
-		done();
-	};
-	xhr.onerror = function() {
-		tlog("getIp failed, took " + (new Date().getTime() - startT) + "ms");
-		done();
-	};
-	xhr.open("GET", settings.url_getIp + url_sep(settings.url_getIp) + (settings.mpot ? "cors=true&" : "") + (settings.getIp_ispInfo ? "isp=true" + (settings.getIp_ispInfo_distance ? "&distance=" + settings.getIp_ispInfo_distance + "&" : "&") : "&") + "r=" + Math.random(), true);
-	xhr.send();
-}
+// // gets client's IP using url_getIp, then calls the done function
+// var ipCalled = false; // used to prevent multiple accidental calls to getIp
+// var ispInfo = ""; //used for telemetry
+// function getIp(done) {
+// 	tverb("getIp");
+// 	if (ipCalled) return;
+// 	else ipCalled = true; // getIp already called?
+// 	var startT = new Date().getTime();
+// 	xhr = new XMLHttpRequest();
+// 	xhr.onload = function() {
+// 		tlog("IP: " + xhr.responseText + ", took " + (new Date().getTime() - startT) + "ms");
+// 		try {
+// 			var data = JSON.parse(xhr.responseText);
+// 			clientIp = data.processedString;
+// 			ispInfo = data.rawIspInfo;
+// 		} catch (e) {
+// 			clientIp = xhr.responseText;
+// 			ispInfo = "";
+// 		}
+// 		done();
+// 	};
+// 	xhr.onerror = function() {
+// 		tlog("getIp failed, took " + (new Date().getTime() - startT) + "ms");
+// 		done();
+// 	};
+// 	xhr.open("GET", settings.url_getIp + url_sep(settings.url_getIp) + (settings.mpot ? "cors=true&" : "") + (settings.getIp_ispInfo ? "isp=true" + (settings.getIp_ispInfo_distance ? "&distance=" + settings.getIp_ispInfo_distance + "&" : "&") : "&") + "r=" + Math.random(), true);
+// 	xhr.send();
+// }
 // download test, calls done function when it's over
 var dlCalled = false; // used to prevent multiple accidental calls to dlTest
 function dlTest(done) {
