@@ -1,11 +1,4 @@
 /*
-	LibreSpeed - Main
-	by Federico Dossena
-	https://github.com/librespeed/speedtest/
-	GNU LGPLv3 License
-*/
-
-/*
    This is the main interface between your webpage and the speedtest.
    It hides the speedtest web worker to the page, and provides many convenient functions to control the test.
    
@@ -49,7 +42,7 @@ function Speedtest() {
   this._settings = {}; //settings for the speedtest worker
   this._state = 0; //0=adding settings, 1=adding servers, 2=server selection done, 3=test running, 4=done
   console.log(
-    "LibreSpeed by Federico Dossena v5.2.4 - https://github.com/librespeed/speedtest"
+    "HSKIHW SpeedTest by Randy Kramer - https://github.com/randykramer07/hskihw-speedtest"
   );
 }
 
