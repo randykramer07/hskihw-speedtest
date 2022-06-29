@@ -56,7 +56,7 @@ Je hebt de nieuwste Go versie nodig om de applicatie te compilen.
     # ipinfo.io API key, if applicable
     ipinfo.apikey: ""
     
-    assets.path="./assets"
+    assets.path: "./assets"
     
     tls: false
     http2: false
