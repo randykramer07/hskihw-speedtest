@@ -4,6 +4,7 @@ var testState = -1; // -1=not started, 0=starting, 1=download test, 2=ping+jitte
 var dlStatus = ""; // download speed in megabit/s with 2 decimal digits
 var ulStatus = ""; // upload speed in megabit/s with 2 decimal digits
 var pingStatus = ""; // ping in milliseconds with 2 decimal digits
+var clientIp = "";
 var dlProgress = 0; //progress of download test 0-1
 var ulProgress = 0; //progress of upload test 0-1
 var pingProgress = 0; //progress of ping+jitter test 0-1
@@ -22,6 +23,9 @@ var settings = {
 	url_dl: "backend/garbage.php", // path to a large file or garbage.php, used for download test. must be relative to this js file
 	url_ul: "backend/empty.php", // path to an empty file, used for upload test. must be relative to this js file
 	url_ping: "backend/empty.php", // path to an empty file, used for ping test. must be relative to this js file
+	url_getIp: "backend/getIP.php",
+	getIp_ispInfo: true,
+	getIp_ispInfo_distance: "km",
 	xhr_dlMultistream: 6, // number of download streams to use (can be different if enable_quirks is active)
 	xhr_ulMultistream: 3, // number of upload streams to use (can be different if enable_quirks is active)
 	xhr_multistreamDelay: 300, //how much concurrent requests should be delayed
@@ -35,6 +39,24 @@ var settings = {
 	useMebibits: false, //if set to true, speed will be reported in mebibits/s instead of megabits/s
     forceIE11Workaround: false //when set to true, it will foce the IE11 upload test on all browsers. Debug only
 };
+
+var log = ""; //telemetry log
+function tlog(s) {
+	if (settings.telemetry_level >= 2) {
+		log += Date.now() + ": " + s + "\n";
+	}
+}
+function tverb(s) {
+	if (settings.telemetry_level >= 3) {
+		log += Date.now() + ": " + s + "\n";
+	}
+}
+function twarn(s) {
+	if (settings.telemetry_level >= 2) {
+		log += Date.now() + " WARN: " + s + "\n";
+	}
+	console.warn(s);
+}
 
 var xhr = null; // array of currently active xhr requests
 var interval = null; // timer used in tests

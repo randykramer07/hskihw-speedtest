@@ -85,7 +85,6 @@ function updateUI(forced){
 	I("ulText").textContent=(status==3&&uiData.ulStatus==0)?"...":format(uiData.ulStatus);
 	drawMeter(I("ulMeter"),mbpsToAmount(Number(uiData.ulStatus*(status==3?oscillate():1))),meterBk,ulColor,Number(uiData.ulProgress),progColor);
 	I("pingText").textContent=format(uiData.pingStatus);
-	I("jitText").textContent=format(uiData.jitterStatus);
 }
 function oscillate(){
 	return 1+0.02*Math.sin(Date.now()/100);
@@ -104,7 +103,6 @@ function initUI(){
 	I("dlText").textContent="";
 	I("ulText").textContent="";
 	I("pingText").textContent="";
-	I("jitText").textContent="";
 	I("ip").textContent="";
 }
 </script>
@@ -229,11 +227,6 @@ function initUI(){
 			<div class="testArea2">
 				<div class="testName">Ping</div>
 				<div id="pingText" class="meterText" style="color:#AA6060"></div>
-				<div class="unit">ms</div>
-			</div>
-			<div class="testArea2">
-				<div class="testName">Jitter</div>
-				<div id="jitText" class="meterText" style="color:#AA6060"></div>
 				<div class="unit">ms</div>
 			</div>
 		</div>

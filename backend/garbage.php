@@ -49,10 +49,9 @@ function sendHeaders()
     header('Pragma: no-cache');
 }
 
-// Determine how much data we should send
 $chunks = getChunkCount(); // Bepaald aantal chunks
 
-// Generate data
+// Genereer random data
 if (function_exists('random_bytes')) {
     $data = random_bytes(1048576);
 } else {
