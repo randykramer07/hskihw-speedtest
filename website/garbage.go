@@ -1,12 +1,10 @@
 package garbage
 
 import (
-	"io"
-	"io/ioutil"
-	"net"
 	"net/http"
-	"os"
-	"github.com/randykramer07/hskihw-speedtest/website"
+	"strconv"
+
+	log "github.com/sirupsen/logrus"
 )
 
 func garbage(w http.ResponseWriter, r *http.Request) {

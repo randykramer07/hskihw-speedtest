@@ -1,4 +1,4 @@
-package web
+package website
 
 import (
 	"crypto/rand"

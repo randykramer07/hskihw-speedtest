@@ -1,11 +1,15 @@
-package main 
+package main
 
 import (
 	"flag"
-	"github.com/randykramer07/hskihw-speedtest/config" // Importeer Configuratiemap
+	_ "time/tzdata"
+
+	"github.com/randykramer07/hskihw-speedtest/config"  // Importeer Configuratiemap
 	"github.com/randykramer07/hskihw-speedtest/website" // Importeer map met Website gerelateerde bestanden
 
 	log "github.com/sirupsen/logrus" // Importeer Logsysteem
+
+	_ "github.com/breml/rootcerts"
 )
 
 var ( // Variabele voor aanwezigheid configuratie, melding voor aanpassing
@@ -14,6 +18,8 @@ var ( // Variabele voor aanwezigheid configuratie, melding voor aanpassing
 
 func main() {
 	flag.Parse{}
-	configuratie := configuratie.Load(*optioneleConfiguratie) // Zet de geladen configuratie om in een lokale variabele
-	website.SetServerLocation(&configuratie) // Lees de serverlocatie uit de configuratie
+	conf := configuratie.Load(*optioneleConfiguratie) // Zet de geladen configuratie om in een lokale variabele
+	website.SetServerLocation(&conf)                  // Lees de serverlocatie uit de configuratie
+	results.Initialize(&conf)
+	log.Fatal(website.Speedtest(&conf))
 }
