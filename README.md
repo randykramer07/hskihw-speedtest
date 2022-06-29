@@ -1,26 +1,24 @@
-# hskihw-speedtest
-Hoe Snel Kan Ik Hier Weg SpeedTest written in GO and PHP.
+# HSKIHW SpeedTest
+Hoe Snel Kan Ik Hier Weg SpeedTest geschreven in GO en PHP.
 
 Lightweight SpeedTest geimplementeerd met onder andere JavaScript, GO en PHP
 
-Take a speed test
-Compatibility
+**Compatibility**
 
-All modern browsers are supported: IE11, latest Edge, latest Chrome, latest Firefox, latest Safari. Works with mobile versions too.
-Features
+Alle moderne browsers worden ondersteund waaronder: IE11, Edge, Chrome, Firefox, Safari. Werkt ook op mobiel.
 
-   - Download
-   -  Upload
-   -  Ping
+**Wat kan de SpeedTest?**
+
+   - Downloadsnelheid meten
+   - Uploadsnelheid meten
+   - Ping meten
    - IP Adres, ISP, afstand van de server (optional)
 
-Server requirements
+**Server requirements**
 
-    Any Go supported platforms
-    BoltDB, PostgreSQL or MySQL database to store test results (optional)
-    A fast! Internet connection
+   Alle systemen die GO ondersteunen
 
-Installatie
+**Installatie**
 
 Je hebt de nieuwste Go versie nodig om de applicatie te compilen.
 
@@ -64,9 +62,9 @@ Je hebt de nieuwste Go versie nodig om de applicatie te compilen.
     # tls_cert_file: "cert.pem"
     # tls_key_file: "privkey.pem"
 
-License
+**License**
 
-Copyright (C) 2016-2020 Federico Dossena Copyright (C) 2020 Maddie Zhan
+Copyright (C) 2022 Randy Kramer
 
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
