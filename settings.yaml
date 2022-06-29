@@ -5,3 +5,6 @@ server.latitude: 0 # Voorbeeld voor server latitude
 server.longtitude: 0 # Voorbeeld voor server longtitude
 assets.path: /website/assets # Locatie waar de website html bestanden staan
 ipinfo.apikey: ""
+http2: false
+tls: false
+

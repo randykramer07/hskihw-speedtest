@@ -16,6 +16,10 @@ type Configuratie struct { // Type .. struct wordt gebruikt om een simple config
 	//Website gerelateerde dingen
 	AssetsPath string `yaml:"assets.path"` // Locatie waar de HTML bestanden staan van de website
 
+	EnableHTTP2 bool   `yaml:"http2"`
+	EnableTLS   bool   `yaml:"tls"`
+	TLSCertFile string `yaml:"tls_cert_file"`
+	TLSKeyFile  string `yaml:"tls_key_file"`
 }
 
 var (

@@ -38,7 +38,7 @@ var (
 	standaardAssets embed.FS
 )
 
-func SpeedTest(configuratie *configuratie.Configuratie) error {
+func SpeedTest(configuratie *config.Configuratie) error {
 	r := chi.NewRouter()     // Maak een nieuwe router in Chi package
 	r.Use(middleware.RealIP) // Zorg dat publiek IP van client bekend wordt bij applicatie
 	r.Use(middleware.GetHead)
