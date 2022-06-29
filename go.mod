@@ -1,4 +1,4 @@
-module randykramer07/hskihw-speedtest
+module github.com/randykramer07/hskihw-speedtest
 
 go 1.18
 
