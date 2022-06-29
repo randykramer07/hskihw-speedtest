@@ -1,4 +1,4 @@
-![HSKIHW Logo](https://github.com/randykramer07/hskihw-speedtest/blob/master/logo/HSKIHW-wit?raw=true)
+![HSKIHW Logo](https://github.com/randykramer07/hskihw-speedtest/blob/main/logo/HSKIHW-wit?raw=true)
 
 # HSKIHW SpeedTest
 Hoe Snel Kan Ik Hier Weg SpeedTest geschreven in GO en PHP.
