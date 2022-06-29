@@ -3,7 +3,7 @@ bind.address: 0.0.0.0
 listen.port: 9100 # Standaard poort waarop de applicatie draait
 server.latitude: 0 # Voorbeeld voor server latitude
 server.longtitude: 0 # Voorbeeld voor server longtitude
-assets.path: /website/assets # Locatie waar de website html bestanden staan
+assets.path: /website # Locatie waar de website html bestanden staan
 ipinfo.apikey: ""
 http2: false
 tls: false
