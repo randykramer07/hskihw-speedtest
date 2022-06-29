@@ -1,41 +1,15 @@
-/*
-	LibreSpeed - Worker
-	by Federico Dossena
-	https://github.com/librespeed/speedtest/
-	GNU LGPLv3 License
-*/
 
 // data reported to main thread
 var testState = -1; // -1=not started, 0=starting, 1=download test, 2=ping+jitter test, 3=upload test, 4=finished, 5=abort
 var dlStatus = ""; // download speed in megabit/s with 2 decimal digits
 var ulStatus = ""; // upload speed in megabit/s with 2 decimal digits
 var pingStatus = ""; // ping in milliseconds with 2 decimal digits
-var jitterStatus = ""; // jitter in milliseconds with 2 decimal digits
-var clientIp = ""; // client's IP address as reported by getIP.php
 var dlProgress = 0; //progress of download test 0-1
 var ulProgress = 0; //progress of upload test 0-1
 var pingProgress = 0; //progress of ping+jitter test 0-1
 var testId = null; //test ID (sent back by telemetry if used, null otherwise)
 
-var log = ""; //telemetry log
-function tlog(s) {
-	if (settings.telemetry_level >= 2) {
-		log += Date.now() + ": " + s + "\n";
-	}
-}
-function tverb(s) {
-	if (settings.telemetry_level >= 3) {
-		log += Date.now() + ": " + s + "\n";
-	}
-}
-function twarn(s) {
-	if (settings.telemetry_level >= 2) {
-		log += Date.now() + " WARN: " + s + "\n";
-	}
-	console.warn(s);
-}
-
-// test settings. can be overridden by sending specific values with the start command
+// Test Settings
 var settings = {
 	mpot: false, //set to true when in MPOT mode
 	test_order: "IP_D_U", //order in which tests will be performed as a string. D=Download, U=Upload, P=Ping+Jitter, I=IP, _=1 second delay
@@ -48,9 +22,6 @@ var settings = {
 	url_dl: "backend/garbage.php", // path to a large file or garbage.php, used for download test. must be relative to this js file
 	url_ul: "backend/empty.php", // path to an empty file, used for upload test. must be relative to this js file
 	url_ping: "backend/empty.php", // path to an empty file, used for ping test. must be relative to this js file
-	url_getIp: "backend/getIP.php", // path to getIP.php relative to this js file, or a similar thing that outputs the client's ip
-	getIp_ispInfo: true, //if set to true, the server will include ISP info with the IP address
-	getIp_ispInfo_distance: "km", //km or mi=estimate distance from server in km/mi; set to false to disable distance estimation. getIp_ispInfo must be enabled in order for this to work
 	xhr_dlMultistream: 6, // number of download streams to use (can be different if enable_quirks is active)
 	xhr_ulMultistream: 3, // number of upload streams to use (can be different if enable_quirks is active)
 	xhr_multistreamDelay: 300, //how much concurrent requests should be delayed
@@ -62,9 +33,6 @@ var settings = {
 	ping_allowPerformanceApi: true, // if enabled, the ping test will attempt to calculate the ping more precisely using the Performance API. Currently works perfectly in Chrome, badly in Edge, and not at all in Firefox. If Performance API is not supported or the result is obviously wrong, a fallback is provided.
 	overheadCompensationFactor: 1.06, //can be changed to compensatie for transport overhead. (see doc.md for some other values)
 	useMebibits: false, //if set to true, speed will be reported in mebibits/s instead of megabits/s
-	telemetry_level: 0, // 0=disabled, 1=basic (results only), 2=full (results and timing) 3=debug (results+log)
-	url_telemetry: "results/telemetry.php", // path to the script that adds telemetry data to the database
-	telemetry_extra: "", //extra data that can be passed to the telemetry through the settings
     forceIE11Workaround: false //when set to true, it will foce the IE11 upload test on all browsers. Debug only
 };
 
@@ -97,8 +65,8 @@ this.addEventListener("message", function(e) {
 				dlStatus: dlStatus,
 				ulStatus: ulStatus,
 				pingStatus: pingStatus,
-				clientIp: clientIp,
-				jitterStatus: jitterStatus,
+				// clientIp: clientIp,
+				// jitterStatus: jitterStatus,
 				dlProgress: dlProgress,
 				ulProgress: ulProgress,
 				pingProgress: pingProgress,
@@ -256,8 +224,6 @@ this.addEventListener("message", function(e) {
 		dlStatus = "";
 		ulStatus = "";
 		pingStatus = "";
-		jitterStatus = "";
-        clientIp = "";
 		dlProgress = 0;
 		ulProgress = 0;
 		pingProgress = 0;
@@ -288,34 +254,34 @@ function clearRequests() {
 		xhr = null;
 	}
 }
-// gets client's IP using url_getIp, then calls the done function
-var ipCalled = false; // used to prevent multiple accidental calls to getIp
-var ispInfo = ""; //used for telemetry
-function getIp(done) {
-	tverb("getIp");
-	if (ipCalled) return;
-	else ipCalled = true; // getIp already called?
-	var startT = new Date().getTime();
-	xhr = new XMLHttpRequest();
-	xhr.onload = function() {
-		tlog("IP: " + xhr.responseText + ", took " + (new Date().getTime() - startT) + "ms");
-		try {
-			var data = JSON.parse(xhr.responseText);
-			clientIp = data.processedString;
-			ispInfo = data.rawIspInfo;
-		} catch (e) {
-			clientIp = xhr.responseText;
-			ispInfo = "";
-		}
-		done();
-	};
-	xhr.onerror = function() {
-		tlog("getIp failed, took " + (new Date().getTime() - startT) + "ms");
-		done();
-	};
-	xhr.open("GET", settings.url_getIp + url_sep(settings.url_getIp) + (settings.mpot ? "cors=true&" : "") + (settings.getIp_ispInfo ? "isp=true" + (settings.getIp_ispInfo_distance ? "&distance=" + settings.getIp_ispInfo_distance + "&" : "&") : "&") + "r=" + Math.random(), true);
-	xhr.send();
-}
+// // gets client's IP using url_getIp, then calls the done function
+// var ipCalled = false; // used to prevent multiple accidental calls to getIp
+// var ispInfo = ""; //used for telemetry
+// function getIp(done) {
+// 	tverb("getIp");
+// 	if (ipCalled) return;
+// 	else ipCalled = true; // getIp already called?
+// 	var startT = new Date().getTime();
+// 	xhr = new XMLHttpRequest();
+// 	xhr.onload = function() {
+// 		tlog("IP: " + xhr.responseText + ", took " + (new Date().getTime() - startT) + "ms");
+// 		try {
+// 			var data = JSON.parse(xhr.responseText);
+// 			clientIp = data.processedString;
+// 			ispInfo = data.rawIspInfo;
+// 		} catch (e) {
+// 			clientIp = xhr.responseText;
+// 			ispInfo = "";
+// 		}
+// 		done();
+// 	};
+// 	xhr.onerror = function() {
+// 		tlog("getIp failed, took " + (new Date().getTime() - startT) + "ms");
+// 		done();
+// 	};
+// 	xhr.open("GET", settings.url_getIp + url_sep(settings.url_getIp) + (settings.mpot ? "cors=true&" : "") + (settings.getIp_ispInfo ? "isp=true" + (settings.getIp_ispInfo_distance ? "&distance=" + settings.getIp_ispInfo_distance + "&" : "&") : "&") + "r=" + Math.random(), true);
+// 	xhr.send();
+// }
 // download test, calls done function when it's over
 var dlCalled = false; // used to prevent multiple accidental calls to dlTest
 function dlTest(done) {
