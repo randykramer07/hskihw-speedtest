@@ -12,6 +12,7 @@ import (
 	log "github.com/sirupsen/logrus"
 	"github.com/umahmood/haversine"
 
+	"github.com/librespeed/speedtest/results"
 	"github.com/randykramer07/hskihw-speedtest/config"
 )
 
@@ -27,11 +28,50 @@ func getRandomData(length int) []byte {
 	return data
 }
 
-func SetServerLocation(configuratie *configuratie.Configuratie) { // Stelt de serverlocatie in aan de hand van vooraf ingestelde coördinaten
-	if configuratie.ServerLatitude != 0 || configuratie.ServerLongtitude != 0 {
-		log.Infof("Ingestelde Server: %.6f, %.6f", configuratie.ServerLatitude, configuratie.ServerLongtitude)
-		serverCoord.Lat = configuratie.ServerLatitude
-		serverCoord.Lon = configuratie.ServerLongtitude
+func getIPInfoURL(address string) string {
+	apiKey := config.LoadedConfig().IPInfoAPIKey
+
+	ipInfoURL := `https://ipinfo.io/%s/json`
+	if address != "" {
+		ipInfoURL = fmt.Sprintf(ipInfoURL, address)
+	} else {
+		ipInfoURL = "https://ipinfo.io/json"
+	}
+
+	if apiKey != "" {
+		ipInfoURL += "?token=" + apiKey
+	}
+
+	return ipInfoURL
+}
+
+func getIPInfo(addr string) results.IPInfoResponse {
+	var ret results.IPInfoResponse
+	resp, err := http.DefaultClient.Get(getIPInfoURL(addr))
+	if err != nil {
+		log.Errorf("Error getting response from ipinfo.io: %s", err)
+		return ret
+	}
+
+	raw, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Errorf("Error reading response from ipinfo.io: %s", err)
+		return ret
+	}
+	defer resp.Body.Close()
+
+	if err := json.Unmarshal(raw, &ret); err != nil {
+		log.Errorf("Error parsing response from ipinfo.io: %s", err)
+	}
+
+	return ret
+}
+
+func SetServerLocation(conf *config.Configuratie) { // Stelt de serverlocatie in aan de hand van vooraf ingestelde coördinaten
+	if conf.ServerLatitude != 0 || conf.ServerLongtitude != 0 {
+		log.Infof("Ingestelde Server: %.6f, %.6f", conf.ServerLatitude, conf.ServerLongtitude)
+		serverCoord.Lat = conf.ServerLatitude
+		serverCoord.Lon = conf.ServerLongtitude
 		return
 	}
 

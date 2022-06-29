@@ -1,5 +1,7 @@
-bind.address: 0.0.0.0 # Stel in op 127.0.0.1 voor localhost, 0.0.0.0 om te binden op alle interfaces (communicatie naar buiten)
+bind.address: 0.0.0.0
+ # Stel in op 127.0.0.1 voor localhost, 0.0.0.0 om te binden op alle interfaces (communicatie naar buiten)
 listen.port: 9100 # Standaard poort waarop de applicatie draait
 server.latitude: 0 # Voorbeeld voor server latitude
 server.longtitude: 0 # Voorbeeld voor server longtitude
-assets.path: website/assets # Locatie waar de website html bestanden staan
+assets.path: /website/assets # Locatie waar de website html bestanden staan
+ipinfo.apikey: ""

@@ -1,4 +1,4 @@
-module hskihw/speedtest
+module randykramer07/hskihw-speedtest
 
 go 1.18
 
@@ -11,6 +11,7 @@ require (
 	github.com/go-chi/cors v1.2.1 // indirect
 	github.com/go-chi/render v1.0.1 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
+	github.com/librespeed/speedtest v0.0.0-20220624065321-fa0ac8cd2336 // indirect
 	github.com/magiconair/properties v1.8.6 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/pelletier/go-toml v1.9.5 // indirect

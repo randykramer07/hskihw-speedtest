@@ -19,7 +19,9 @@ import (
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/cors"
 	"github.com/go-chi/render"
-	"github.com/pires/go-proxyproto"
+
+	"github.com/librespeed/speedtest/results"
+	"github.com/randykramer07/hskihw-speedtest/config"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -49,9 +51,9 @@ func SpeedTest(configuratie *configuratie.Configuratie) error {
 
 	r.Use(cs.Handler)           // Gebruikt Handler voor cors
 	r.Use(middleware.NoCache)   // Middleware die maximaal aantal HTTP headers insteld om zo te voorkomen dat de router wordt opgeslagen in cache.
-	r.use(middleware.Recoverer) // Middleware die panics recoverd, logged en terugherleid
+	r.Use(middleware.Recoverer) // Middleware die panics recoverd, logged en terugherleid
 
-	var assets http.FileSystem // Variabele voor website bestanden
+	var assetFS http.FileSystem // Variabele voor website bestanden
 
 	if fi, err := os.Stat(configuratie.AssetsPath); os.IsNotExist(err) || !fi.IsDir() {
 		log.Warnf("De ingestelde folder voor de assets bestaat niet, of is geen folder")
@@ -59,15 +61,20 @@ func SpeedTest(configuratie *configuratie.Configuratie) error {
 		if err != nil {
 			log.FatalF("Er is een fout opgetreden bij het openen van de standaard bestanden: %s", err)
 		}
-		assets = http.FS(sub)
+		assetFS = http.FS(sub)
 	} else {
-		assets = justFilesFilesystem{fs: http.Dir(configuratie.AssetsPath), readDirBatchSize: 2}
+		assetFS = justFilesFilesystem{fs: http.Dir(configuratie.AssetsPath), readDirBatchSize: 2}
 	}
 
+	r.Get("/*", pages(assetFS))
 	r.HandleFunc("/empty", empty)
 	r.HandleFunc("../backend/empty", empty)
 	r.HandleFunc("/garbage", garbage)
 	r.HandleFunc("../backend/garbage", garbage)
+	r.Get("/results", results.DrawPNG)
+	r.Get("/results/", results.DrawPNG)
+	r.Get("/backend/results", results.DrawPNG)
+	r.Get("/backend/results/", results.DrawPNG)
 
 	// PHP Frontend standaard bestanden
 	r.HandleFunc("../backend/empty.php", empty)
@@ -169,7 +176,7 @@ func garbage(w http.ResponseWriter, r *http.Request) {
 	}
 
 	for i := 0; i < chunks; i++ {
-		if _, err := w.Write(randomData); err != nil {
+		if _, err := w.Write(randomizedData); err != nil {
 			log.Errorf("Error writing back to client at chunk number %d: %s", i, err)
 			break
 		}

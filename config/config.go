@@ -12,7 +12,7 @@ type Configuratie struct { // Type .. struct wordt gebruikt om een simple config
 	Port             string  `yaml:"listen.port"`       // Poort waarop de applicatie luistert
 	ServerLatitude   float64 `yaml:"server.latitude"`   // Latitude GPS Locatie van de testserver (Om afstand te bepalen)
 	ServerLongtitude float64 `yaml:"server.longtitude"` // Longtitude GPS Locatie van de testserver (Om afstand te bepalen)
-
+	IPInfoAPIKey     string  `yaml:"ipinfo.apikey"`     // API Key om gebruik te maken van https://ipinfo.io
 	//Website gerelateerde dingen
 	AssetsPath string `yaml:"assets.path"` // Locatie waar de HTML bestanden staan van de website
 
@@ -26,7 +26,10 @@ var (
 func init() { // Stel voor viper de standaard gegevens in (Deze worden aangepast aan de hand van de settings.yaml)
 	viper.SetDefault("bind.address", "127.0.0.1") // Standaard interface
 	viper.SetDefault("listen.port", "9100")       //Standaard poort
-
+	viper.SetDefault("download_chunks", 4)
+	viper.SetDefault("enable_cors", false)
+	viper.SetDefault("enable_tls", false)
+	viper.SetDefault("enable_http2", false)
 	viper.SetConfigName("settings") // Naam van het bestand met aangepaste settings
 	viper.SetConfigType("yaml")
 	viper.AddConfigPath(".") // Locatie van het settings bestand
