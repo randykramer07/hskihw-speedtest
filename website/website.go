@@ -159,11 +159,11 @@ func garbage(w http.ResponseWriter, r *http.Request) {
 	// chunk size set to 4 by default
 	chunks := 4
 
-	ckSize := r.FormValue("ckSize")
-	if ckSize != "" {
-		i, err := strconv.ParseInt(ckSize, 10, 64)
+	CkGrootte := r.FormValue("CkGrootte")
+	if CkGrootte != "" {
+		i, err := strconv.ParseInt(CkGrootte, 10, 64)
 		if err != nil {
-			log.Errorf("Invalid chunk size: %s", ckSize)
+			log.Errorf("Invalid chunk size: %s", CkGrootte)
 			log.Warnf("Will use default value %d", chunks)
 		} else {
 			// limit max chunk size to 1024
