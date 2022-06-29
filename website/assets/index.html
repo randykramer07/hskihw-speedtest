@@ -17,8 +17,10 @@ s.setParameter("time_dl_max",10); //10 seconds for the download test
 s.setParameter("time_ul_max",15); //15 seconds for the upload test
 //END OF CUSTOM SETTINGS
 s.onupdate=function(data){ //callback to update data in UI
+	I("ip").textContent=uiData.clientIp;
     I("dlText").textContent=(data.testState==1&&data.dlStatus==0)?"...":data.dlStatus;
     I("ulText").textContent=(data.testState==3&&data.ulStatus==0)?"...":data.ulStatus;
+	I("pingTest").textContent=format(uiData.pingStatus); // Zelf toegevoegd
 }
 s.onend=function(aborted){ //callback for test ended/aborted
     I("startStopBtn").className=""; //show start button again
@@ -42,6 +44,8 @@ function startStop(){ //start/stop button pressed
 function initUI(){
 	I("dlText").textContent="";
 	I("ulText").textContent="";
+	I("pingText").textContent=""; // Zelf toegevoegd
+	I("ip").textContent="";
 }
 
 function I(id){return document.getElementById(id);}
@@ -163,6 +167,11 @@ function I(id){return document.getElementById(id);}
 			<div class="testName">Upload</div>
 			<div id="ulText" class="meterText"></div>
 			<div class="unit">Mbps</div>
+		</div>
+		<div class="testArea">
+			<div class="testName">Ping</div>
+			<div id="pingText" class="meterText"></div>
+			<div class="unit">ms</div>
 		</div>
 	</div>
 </div>

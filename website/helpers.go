@@ -27,7 +27,7 @@ func getRandomData(length int) []byte {
 	return data
 }
 
-func SetServerLocation(configuratie *configuratie.Configuratie) {
+func SetServerLocation(configuratie *configuratie.Configuratie) { // Stelt de serverlocatie in aan de hand van vooraf ingestelde coördinaten
 	if configuratie.ServerLatitude != 0 || configuratie.ServerLongtitude != 0 {
 		log.Infof("Ingestelde Server: %.6f, %.6f", configuratie.ServerLatitude, configuratie.ServerLongtitude)
 		serverCoord.Lat = configuratie.ServerLatitude
