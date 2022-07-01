@@ -59,7 +59,7 @@ func SpeedTest(configuratie *config.Configuratie) error {
 		log.Warnf("De ingestelde folder voor de assets bestaat niet, of is geen folder")
 		sub, err := fs.Sub(standaardAssets, "assets")
 		if err != nil {
-			log.FatalF("Er is een fout opgetreden bij het openen van de standaard bestanden: %s", err)
+			log.Fatalf("Er is een fout opgetreden bij het openen van de standaard bestanden: %s", err)
 		}
 		assetFS = http.FS(sub)
 	} else {
@@ -151,23 +151,22 @@ func empty(w http.ResponseWriter, r *http.Request) {
 }
 
 func garbage(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Description", "File Transfer")
-	w.Header().Set("Content-Type", "application/octet-stream")
-	w.Header().Set("Content-Disposition", "attachment; filename=random.dat")
-	w.Header().Set("Content-Transfer-Encoding", "binary")
+	w.Header().Set("Content-Description", "File Transfer")                   // Beschrijving die mee wordt gegeven in de header
+	w.Header().Set("Content-Type", "application/octet-stream")               // Type van de header
+	w.Header().Set("Content-Disposition", "attachment; filename=random.dat") // Bestandsnaam waar de data tijdelijk in wordt opgeslagen
+	w.Header().Set("Content-Transfer-Encoding", "binary")                    // Encoding van de header
 
-	// chunk size set to 4 by default
+	// Grootte van de chunks staat altijd op 4
 	chunks := 4
 
-	CkGrootte := r.FormValue("CkGrootte")
-	if CkGrootte != "" {
-		i, err := strconv.ParseInt(CkGrootte, 10, 64)
+	ckGrootte := r.FormValue("ckGrootte")
+	if ckGrootte != "" {
+		i, err := strconv.ParseInt(ckGrootte, 10, 64)
 		if err != nil {
-			log.Errorf("Invalid chunk size: %s", CkGrootte)
-			log.Warnf("Will use default value %d", chunks)
+			log.Errorf("Ongeldig aantal Chunks: %s", ckGrootte)   // Error als er meer chunks zijn ingegeven dan maximaal aantal
+			log.Warnf("We gebruiken de standaard van %d", chunks) // Melding dat de standaard aantal gebruikt gaat worden
 		} else {
-			// limit max chunk size to 1024
-			if i > 1024 {
+			if i > 1024 { // Maximale chunk limiet van 1024 chunks
 				chunks = 1024
 			} else {
 				chunks = int(i)
@@ -175,9 +174,9 @@ func garbage(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	for i := 0; i < chunks; i++ {
-		if _, err := w.Write(randomizedData); err != nil {
-			log.Errorf("Error writing back to client at chunk number %d: %s", i, err)
+	for i := 0; i < chunks; i++ { // For loop om aantal chunks te beoaken
+		if _, err := w.Write(randomizedData); err != nil { // Indien error geef melding
+			log.Errorf("Er is een fout opgetreden bij het ophalen van de chunks %d: %s", i, err)
 			break
 		}
 	}

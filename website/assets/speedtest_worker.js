@@ -361,7 +361,7 @@ function dlTest(done) {
 					if (settings.xhr_dlUseBlob) xhr[i].responseType = "blob";
 					else xhr[i].responseType = "arraybuffer";
 				} catch (e) {}
-				xhr[i].open("GET", settings.url_dl + url_sep(settings.url_dl) + (settings.mpot ? "cors=true&" : "") + "r=" + Math.random() + "&CkGrootte=" + settings.garbagePhp_chunkSize, true); // random string to prevent caching
+				xhr[i].open("GET", settings.url_dl + url_sep(settings.url_dl) + (settings.mpot ? "cors=true&" : "") + "r=" + Math.random() + "&ckGrootte=" + settings.garbagePhp_chunkSize, true); // random string to prevent caching
 				xhr[i].send();
 			}.bind(this),
 			1 + delay
